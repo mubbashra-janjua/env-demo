@@ -1,7 +1,9 @@
 {
   "name": "github-pages-deployment",
   "version": "1.0.0",
-  "scripts": {
+  "scripts": { 
+    {"build": "vue-cli-service build" 
+  }
     "deploy": "gh-pages -d ."
   },
   "dependencies": {
