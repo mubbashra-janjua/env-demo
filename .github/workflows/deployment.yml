@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: CI/CD Pipeline
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
       - main
 
 jobs:
-  deploy:
+  staging:
     runs-on: ubuntu-latest
-    environment: production # Specify the environment here
+    environment: staging
 
     steps:
     - name: Checkout Code
@@ -17,7 +17,22 @@ jobs:
     - name: Build Project
       run: npm run build
 
-    - name: Deploy to GitHub Pages
+    - name: Deploy to Staging
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+
+  production:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: staging # Run this job only after staging is complete
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Deploy to Production
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
